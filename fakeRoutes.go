@@ -57,27 +57,25 @@ func concurrentRouteTo(destination string) (routes []string) {
 		route := <-c
 		routes = append(routes, route)
 	}
+	// timeout := time.After(120 * time.Millisecond)
+	// for i := 0; i < 3; i++ {
+	// 	select {
+	// 	case route := <-c:
+	// 		routes = append(routes, route)
+	// 	case <-timeout:
+	// 		fmt.Println("timed out")
+	// 		return
+	// 	}
+	// }
 	return
 }
 
 func replicatedRouteTo(destination string) (routes []string) {
-	c := make (chan string)
-	go func() { c <- First(destination, fakeRoute("publicTransport replica1"), fakeRoute("publicTransport replica2")) } ()
-	go func() { c <- First(destination, fakeRoute("car replica1"), fakeRoute("car replica2")) } () 
-	go func() { c <- First(destination, fakeRoute("bike replica1"), fakeRoute("bike replica2")) } ()
-
-	for i := 0; i < 3; i++ {
-		route := <-c
-		routes = append(routes, route)
-	}
+	// same as before, but use multiple replicas to decrease the chance of a timeout
 	return
 }
 
 func First(destination string, replicas ...Route) string {
-	c := make (chan string)
-	searchReplica := func(i int) { c <- replicas[i](destination) }
-	for i := range replicas {
-		go searchReplica(i)
-	}
-	return <-c
+	// create a channel that handles multiple replicas of each transportation system and returns only the fastest one
+	return "not implemented"
 }
