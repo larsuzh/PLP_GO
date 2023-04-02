@@ -33,9 +33,8 @@ func concurrentRouteTo(destination string) (routes []string) {
 }
 
 func calculateWithRoute(mode string, destination string) string {
-	r := fakeRoute(mode)
-	erg := r(destination)
-	return erg
+	route := fakeRoute(mode)
+	return route(destination)
 }
 
 func calculateAllRoutes(destination string) string {
